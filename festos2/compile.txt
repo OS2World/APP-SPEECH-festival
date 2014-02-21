@@ -1,0 +1,42 @@
+
+Preperations
+============
+
+To compile speech_tools and festival, you will need almost all GNU file
+and shell utilities including sed and a unix shell... phew.  Then,
+because of some hardcoded code somewhere, you will need to place rm.exe
+and sh.exe in the \bin of the drive where festival has been
+uncompressed.  ie.:  /bin/sh and /bin/rm
+
+You will also need GNU Make.  The port of the version 3.76 by Kai Uwe
+Rommel will NOT work.  The port of the version 3.75 by the same author
+will give Error 255 after making dependencies of each directory, and
+will quit but you can rexecute it many times and it will eventually
+finish.  For the interested, I have compiled version 3.78.1, and it
+worked flawlessly, but it would need to be patched for the usual slash,
+backslash, colon and fork() issues to be of any use.
+
+To make sure GNU Make uses the UNIX shell, do a "set COMSPEC=bash"
+before using the makefiles.
+
+
+Code modification
+=================
+
+In the current 1.4.1 distribution,  reference to os2audio are missing
+in festival\src\arch\festival\festival.cc, speech_tools\audio\audioP.h
+and speech_tools\audio\gen_audio.cc. os2_audio.mak is also missing in
+festival\config\modules and speech_tools\config\modules.
+
+os2_audio.cc and ix86_OS22.mak also needs an update in speech_tools as
+well as gcc27emx.mak and gcc28emx.mak.
+
+A function in audspio.cc can easily be optimised to use spawn() (check
+the file named spawn).
+
+audsp.cc can be easily optimized to use threads.  Use the one included.
+
+In speech_tools\config\rules\defaults.mak  line 76 and 83,
+add "lib" to "-l" for .a files to work properly with EMX's ld.exe.
+
+Samuel Audet <guardia@cam.org>

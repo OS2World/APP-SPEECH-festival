@@ -1,0 +1,47 @@
+/* that's for somewhere in audspio.cc - uses spawn() instead of fork() exec() */
+
+#include <fcntl.h>
+#include <sys/process.h>
+static int start_sub_process(int *fds, int argc, char **argv)
+{
+   // start sub_process with stdin and stdout bound to pipes whose ends
+   // are in fds[0] and fds[1]
+   int in[2];
+   int out[2];
+   int save[2];
+   (void)argc;
+
+   if ((pipe(in) != 0) ||
+   (pipe(out) != 0))
+   {
+      cerr << "pipe_open: failed to open pipes\n";
+      festival_error();
+      return -1;
+   }
+
+   save[0]=dup(0); /* save the stdin handle */
+   save[1]=dup(1); /* save the stdout handle */
+   dup2(in[0],0); /* assign the read end of the pipe to stdin */
+   dup2(out[1],1); /* assign the write end of the pipe to stdout */
+   fcntl(in[1], F_SETFD, FD_CLOEXEC); /* prevent inheritance */
+   fcntl(out[0], F_SETFD, FD_CLOEXEC);
+   fcntl(save[1], F_SETFD, FD_CLOEXEC);
+   fcntl(save[0], F_SETFD, FD_CLOEXEC);
+   if((audsp_pid = spawnv(P_NOWAIT,argv[0],argv)) == -1)
+   {
+      cerr << "pipe_open: failed to start " << argv[0] << endl;
+      festival_error();
+      return -1;
+   }
+
+   /* restore the original stdin and stdout handles */
+   dup2(save[0],0);
+   dup2(save[1],1);
+   close(save[0]);
+   close(save[1]);
+
+   fds[0] = in[1];
+   fds[1] = out[0];
+
+   return 0;
+}

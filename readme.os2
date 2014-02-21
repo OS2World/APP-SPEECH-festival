@@ -1,0 +1,85 @@
+This is Festival 1.4.1 compiled for OS/2.  The changes needed to compile
+it back from scratch can be found in festos2.zip.  I fixed OS/2 audio!!  It
+should now output less garbage...
+
+I wasn't able to package the libraries in DLLs because there are some
+functions that have more than 254 characters and OS/2 does not support
+that!  Maybe they can be ignored and removed from the export, but I did
+not try.
+
+Festival now also have a nice and simple C function interface.  Once the
+libraries are compiled, you can call functions directly from them to
+speak!  Any program can use them.
+
+To use the included EXEs, you will need the EMX libraries that can be
+found at ftp://hobbes.nmsu.edu/pub/os2/dev/emx/v0.9c/emxrt.zip
+
+You will also need a properly functionning DART subsystem for Festival
+to be able to use your sound card.
+
+You will need a HOME and TMPDIR environmental variables.
+ex.:
+set HOME=x:\home
+set TMPDIR=x:\tmp
+
+This package can use a variety of dictionaries and synthetizers.  It
+supports US and UK English in more voices that you will ever need as
+well as one Spanish voice.  The best sounding synthetizer is MBROLA and
+is a seperate EXE found at http://tcts.fpms.ac.be/synthesis/mbrola.html
+Check Festival homepage for more information
+http://www.cstr.ed.ac.uk/projects/festival.html and read README-1.4.1 to
+get all the information on all the dictionary and database available!!
+
+MBROLA.EXE and the corresponding script for Festival are relatively
+small so I included them all in their right directory.  You will only
+need to get the Festival dictionary and Festival or MBROLA database you
+want (~6 megs each).
+
+Note: to install an MBROLA database, you will need to go in the
+corresponding \festival\lib\voices\xx_mbrola directory, and
+"unzip <database>" or "pkunzip -d <database>"
+which will create the necessary directories.
+
+To untar all the other files, you will need GNU tar and GNU zip.  Once
+those are installed, you have to go to the directory below \festival and do:
+"tar -zxvf <file>".
+
+Then launch "festival.exe".  Basic speech commands are:
+
+(intro)
+(SayText "Hello World")
+(tts "readme.os2" nil)
+
+Directories need to use the / and not \.
+
+To change the current voice, the command usually looks like
+
+(voice_name_type)
+
+So for us1 of mbrola, this is (voice_us1_mbrola) and for rab with
+diphone algorithm included with festival, this is (voice_rab_diphone).
+
+Full documentation can be found on Festival site
+http://www.cstr.ed.ac.uk/projects/festival.html
+I have also compiled a version in INF format using texi2ipf by
+Andreas Kaiser <ak@ananke.stgt.sub.org>.  It might not be perfect.
+
+Maybe I'll get back to BackTalk or Screen Reader/2 one day...
+
+Thanks to the authors of Festival and MBROLA for the great projects!
+
+Contacting the Author
+=====================
+
+Samuel Audet
+
+E-mail:       guardia@cam.org
+Homepage:     http://www.cam.org/~guardia
+IRC nick:     Guardian_ (be sure it's me before starting asking questions though)
+
+Snail Mail:
+
+   377, rue D'Argenteuil
+   Laval, Quebec
+   H7N 1P7
+   CANADA
